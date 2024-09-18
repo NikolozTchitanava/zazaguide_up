@@ -7,7 +7,7 @@ import os
 import sqlite3
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'
+app.secret_key = os.getenv("APP_SECRET_KEY")
 app.config['UPLOAD_FOLDER'] = os.path.join(app.root_path, 'uploads')
 app.config['MAX_CONTENT_PATH'] = 1024 * 1024 * 20
 
