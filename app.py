@@ -1,10 +1,14 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash, send_from_directory
 from flask_wtf import FlaskForm
 from werkzeug.utils import secure_filename
+from werkzeug.security import generate_password_hash, check_password_hash
 from wtforms import FileField, SubmitField
 from wtforms.validators import DataRequired
 import os
 import sqlite3
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.getenv("APP_SECRET_KEY")
@@ -33,13 +37,20 @@ def init_db():
             password TEXT NOT NULL
         )
     ''')
-    c.execute("INSERT OR IGNORE INTO admin (username, password) VALUES (?, ?)", ('admin', 'password'))
     c.execute('''
         CREATE TABLE IF NOT EXISTS images (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             filename TEXT NOT NULL
         )
     ''')
+
+    c.execute("SELECT COUNT(*) FROM admin")
+    admin_count = c.fetchone()[0]
+
+    if admin_count == 0:
+        hashed_password = generate_password_hash('password', method='pbkdf2:sha256')
+        c.execute("INSERT INTO admin (username, password) VALUES (?, ?)", ('admin', hashed_password))
+
     conn.commit()
     conn.close()
 
@@ -71,10 +82,11 @@ def admin_login():
         password = request.form['password']
         conn = sqlite3.connect('database.db')
         c = conn.cursor()
-        c.execute('SELECT * FROM admin WHERE username = ? AND password = ?', (username, password))
+        c.execute('SELECT * FROM admin WHERE username = ?', (username,))
         admin = c.fetchone()
         conn.close()
-        if admin:
+
+        if admin and check_password_hash(admin[2], password):
             session['admin_logged_in'] = True
             return redirect(url_for('admin_dashboard'))
         else:
