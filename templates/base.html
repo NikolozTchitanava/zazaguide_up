@@ -40,21 +40,22 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px;
+            padding: 10px 20px;
             background-color: #ffffff;
             border: 1px solid #ff2020;
             border-radius: 9px;
+            height: 80px;
         }
         .headernav img {
-            width: 150px;
+            width: 80px; /* Decreased logo size */
         }
         nav ul {
             display: flex;
-            gap: 40px;
+            gap: 20px;
             list-style-type: none;
         }
         nav ul li a {
-            font-size: 17px;
+            font-size: 15px;
             font-family: "Amazon Ember", sans-serif;
             color: black;
         }
@@ -69,7 +70,7 @@
             background-color: white;
             border: 1px solid #d5d9d9;
             border-radius: 9px;
-            padding: 10px;
+            padding: 5px;
             font-size: 14px;
             cursor: pointer;
         }
@@ -79,6 +80,11 @@
         .languagediv img {
             width: 20px;
             margin-right: 5px;
+        }
+        .login-icon {
+            margin-left: 20px;
+            width: 1700px; /* Increased login icon size */
+            cursor: pointer;
         }
         .container {
             width: min(100%, 1440px);
@@ -117,6 +123,9 @@
                     <img src="{{ url_for('static', filename='flag.png') }}" alt="Flag">
                     Switch language
                 </button>
+                <a href="{{ url_for('user_login') }}">
+                    <img src="{{ url_for('static', filename='login.png') }}" alt="Login" class="login-icon">
+                </a>
             </div>
         </div>
     </header>

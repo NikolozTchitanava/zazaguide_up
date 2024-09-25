@@ -138,10 +138,14 @@ def user_login():
         
         if user and check_password_hash(user[2], password):
             session['user_logged_in'] = True
+            session['username'] = user[1]  # Store the username in session
             flash('Login successful!')
             return redirect(url_for('home'))
         else:
             flash('Invalid credentials, please try again.')
+    
+    return render_template('login.html')
+
     
     return render_template('login.html')
 

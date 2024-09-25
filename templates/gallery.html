@@ -1,26 +1,16 @@
 {% extends "base.html" %}
 
-{% block title %}
-    Gallery
-{% endblock %}
-
 {% block content %}
-    <h1>Gallery</h1>
-    <div class="gallery-container">
-        {% for index, image in enumerate(images) %}
-        <div class="gallery-item">
-            <a href="#lightbox-{{ index }}">
-                <img src="{{ url_for('uploaded_file', filename=image[0]) }}" alt="Gallery Image">
-            </a>
+<div class="container">
+    <h2 class="text-center">Gallery</h2>
+    <div class="gallery-images">
+        <div class="row">
+            {% for idx, image in enumerate(images) %}
+                <div class="col-md-4 gallery-item">
+                    <img src="{{ url_for('uploaded_file', filename=image) }}" alt="Gallery Image" class="img-fluid">
+                </div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
-
-    {% for index, image in enumerate(images) %}
-    <div id="lightbox-{{ index }}" class="lightbox">
-        <a href="#lightbox-{{ (index - 1) % images|length }}" class="arrow arrow-left">&#10094;</a>
-        <img src="{{ url_for('uploaded_file', filename=image[0]) }}" alt="Gallery Image" onclick="location.href='#_'">
-        <a href="#lightbox-{{ (index + 1) % images|length }}" class="arrow arrow-right">&#10095;</a>
-    </div>
-    {% endfor %}
+</div>
 {% endblock %}

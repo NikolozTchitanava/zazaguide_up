@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}User Login{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <h2>Login to Your Account</h2>
+    <form method="POST" action="{{ url_for('user_login') }}">
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" class="input-field" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" class="input-field" required>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="login-btn">Login</button>
+        </div>
+        <p class="redirect-signup">
+            New to ZazaGuide? <a href="{{ url_for('user_signup') }}">Create an account</a>.
+        </p>
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <ul>
+              {% for message in messages %}
+                <li style="color: red;">{{ message }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
+    </form>
+</div>
+{% endblock %}
+
+<style>
+    .login-container {
+        background-color: white;
+        padding: 50px;
+        max-width: 400px;
+        margin: 100px auto;
+        border-radius: 15px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    h2 {
+        color: #ff2020;
+        font-family: "Amazon Ember", sans-serif;
+        font-size: 28px;
+        margin-bottom: 30px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        display: block;
+        color: #333;
+        margin-bottom: 8px;
+        font-size: 16px;
+    }
+
+    .input-field {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #d5d9d9;
+        border-radius: 8px;
+        font-size: 16px;
+        box-sizing: border-box;
+    }
+
+    .login-btn {
+        width: 100%;
+        padding: 12px;
+        background-color: #ff2020;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 18px;
+        margin-top: 20px;
+    }
+
+    .login-btn:hover {
+        background-color: #e60000;
+    }
+
+    .redirect-signup {
+        margin-top: 20px;
+        font-size: 14px;
+    }
+
+    .redirect-signup a {
+        color: #ff2020;
+        text-decoration: underline;
+    }
+
+    .redirect-signup a:hover {
+        color: #e60000;
+    }
+</style>

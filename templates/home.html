@@ -1,9 +1,32 @@
 {% extends "base.html" %}
 
-{% block title %}
-    Home
-{% endblock %}
+{% block title %}Welcome to ZazaGuide{% endblock %}
 
 {% block content %}
-    <h1>Welcome to Zazaguide</h1>
+<div class="home-container">
+    {% if session['user_logged_in'] %}
+        <h1>Welcome to ZazaGuide, {{ session['username'] }}!</h1>
+    {% else %}
+        <h1>Welcome to ZazaGuide!</h1>
+    {% endif %}
+    <p>Explore our tours, gallery, and more.</p>
+</div>
 {% endblock %}
+
+<style>
+    .home-container {
+        text-align: center;
+        margin-top: 100px;
+        font-family: "Amazon Ember", sans-serif;
+    }
+
+    h1 {
+        color: #ff2020;
+        font-size: 32px;
+    }
+
+    p {
+        font-size: 18px;
+        color: #333;
+    }
+</style>

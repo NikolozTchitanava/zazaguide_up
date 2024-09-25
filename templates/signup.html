@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% block content %}
+<div class="signup-container">
+    <h2>Create Your Account</h2>
+    <form method="POST" action="{{ url_for('user_signup') }}">
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" class="input-field" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" class="input-field" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" class="input-field" required>
+        </div>
+        <div class="form-group">
+            <label for="telegram_account">Telegram Account (optional):</label>
+            <input type="text" id="telegram_account" name="telegram_account" class="input-field">
+        </div>
+        <div class="form-group">
+            <button type="submit" class="signup-btn">Sign Up</button>
+        </div>
+        <p class="redirect-login">
+            Already have an account? <a href="{{ url_for('user_login') }}">Login here</a>.
+        </p>
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <ul>
+              {% for message in messages %}
+                <li style="color: red;">{{ message }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
+    </form>
+</div>
+{% endblock %}
+
+<style>
+    .signup-container {
+        background-color: white;
+        padding: 50px;
+        max-width: 450px;
+        margin: 100px auto;
+        border-radius: 15px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    h2 {
+        color: #ff2020;
+        font-family: "Amazon Ember", sans-serif;
+        font-size: 28px;
+        margin-bottom: 30px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        display: block;
+        color: #333;
+        margin-bottom: 8px;
+        font-size: 16px;
+    }
+
+    .input-field {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #d5d9d9;
+        border-radius: 8px;
+        font-size: 16px;
+        box-sizing: border-box;
+    }
+
+    .signup-btn {
+        width: 100%;
+        padding: 12px;
+        background-color: #ff2020;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 18px;
+        margin-top: 20px;
+    }
+
+    .signup-btn:hover {
+        background-color: #e60000;
+    }
+
+    .redirect-login {
+        margin-top: 20px;
+        font-size: 14px;
+    }
+
+    .redirect-login a {
+        color: #ff2020;
+        text-decoration: underline;
+    }
+
+    .redirect-login a:hover {
+        color: #e60000;
+    }
+</style>
