@@ -59,6 +59,9 @@ def init_pg():
 @app.route('/')
 @app.route('/home')
 def home():
+    if 'user_logged_in' in session:
+        username = session.get('username')
+        return render_template('home.html', username=username)
     return render_template('home.html')
 
 @app.route('/gallery')
@@ -79,7 +82,9 @@ def admin_login():
         admin = pg_cursor.fetchone()
 
         if admin and check_password_hash(admin[2], password):
+            session.pop('user_logged_in', None)
             session['admin_logged_in'] = True
+            session['username'] = username
             return redirect(url_for('admin_dashboard'))
         else:
             flash('Invalid credentials, please try again.')
@@ -137,8 +142,9 @@ def user_login():
         user = pg_cursor.fetchone()
         
         if user and check_password_hash(user[2], password):
+            session.pop('admin_logged_in', None)
             session['user_logged_in'] = True
-            session['username'] = user[1]  # Store the username in session
+            session['username'] = username
             flash('Login successful!')
             return redirect(url_for('home'))
         else:
@@ -146,13 +152,15 @@ def user_login():
     
     return render_template('login.html')
 
-    
-    return render_template('login.html')
-
 @app.route('/admin/logout')
 def admin_logout():
     session.pop('admin_logged_in', None)
     return redirect(url_for('admin_login'))
+
+@app.route('/user/logout')
+def user_logout():
+    session.pop('user_logged_in', None)
+    return redirect(url_for('home'))
 
 @app.route('/contact')
 def contact():
