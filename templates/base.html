@@ -5,35 +5,89 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
     <style>
+        html, body, div, span, applet, object, iframe,
+        h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+        a, abbr, acronym, address, big, cite, code,
+        del, dfn, em, img, ins, kbd, q, s, samp,
+        small, strike, strong, sub, sup, tt, var,
+        b, u, i, center,
+        dl, dt, dd, ol, ul, li,
+        fieldset, form, label, legend,
+        table, caption, tbody, tfoot, thead, tr, th, td,
+        article, aside, canvas, details, embed, 
+        figure, figcaption, footer, header, hgroup, 
+        menu, nav, output, ruby, section, summary,
+        time, mark, audio, video {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            font-size: 100%;
+            font: inherit;
+            vertical-align: baseline;
+        }
         body {
+            line-height: 1.6;
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
             margin: 0;
+            padding: 0;
         }
-        .container {
-            text-align: center;
-            background-color: #fff;
-            padding: 50px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        a {
+            text-decoration: none;
+            color: #000;
         }
-        h1 {
-            color: #333;
-        }
-        .buttons {
+        .headernav {
             display: flex;
             justify-content: space-between;
-            margin-top: 20px;
+            align-items: center;
+            padding: 20px;
+            background-color: #ffffff;
+            border: 1px solid #ff2020;
+            border-radius: 9px;
         }
-        .button {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: #fff;
-            text-decoration: none;
-            border-radius: 5px;
+        .headernav img {
+            width: 150px;
+        }
+        nav ul {
+            display: flex;
+            gap: 40px;
+            list-style-type: none;
+        }
+        nav ul li a {
+            font-size: 17px;
+            font-family: "Amazon Ember", sans-serif;
+            color: black;
+        }
+        nav ul li a:hover {
+            color: #ff2020;
+        }
+        .languagediv {
+            display: flex;
+            align-items: center;
+        }
+        .languagediv button {
+            background-color: white;
+            border: 1px solid #d5d9d9;
+            border-radius: 9px;
+            padding: 10px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .languagediv button:hover {
+            background-color: #f7fafa;
+        }
+        .languagediv img {
+            width: 20px;
+            margin-right: 5px;
+        }
+        .container {
+            width: min(100%, 1440px);
+            margin: 40px auto;
+            padding: 40px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            text-align: center;
         }
         .message-icon {
             position: fixed;
@@ -42,27 +96,42 @@
             width: 50px;
             height: 50px;
             cursor: pointer;
-            z-index: 1000;
         }
     </style>
+</head>
+<body>
+    <header>
+        <div class="headernav">
+            <a href="/home">
+                <img src="{{ url_for('static', filename='logo.jpeg') }}" alt="Logo">
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="/tours">Tours</a></li>
+                    <li><a href="/home">Home</a></li>
+                    <li><a href="/gallery">Gallery</a></li>
+                </ul>
+            </nav>
+            <div class="languagediv">
+                <button>
+                    <img src="{{ url_for('static', filename='flag.png') }}" alt="Flag">
+                    Switch language
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+
+    <img src="{{ url_for('static', filename='messege.png') }}" alt="Contact Us" class="message-icon" onclick="goToContact()">
+
     <script>
         function goToContact() {
             window.location.href = "{{ url_for('contact') }}";
         }
     </script>
-</head>
-<body>
-    <div class="container">
-        {% block content %}{% endblock %}
-        <div class="buttons">
-            <a href="/tours" class="button">Tours</a>
-            <a href="/" class="button">Home</a>
-            <a href="/gallery" class="button">Gallery</a>
-        </div>
-    </div>
-    <img src="{{ url_for('static', filename='messege.png') }}" 
-         alt="Contact Us" 
-         class="message-icon" 
-         onclick="goToContact()">
+
 </body>
 </html>

@@ -55,10 +55,9 @@ def init_db():
     conn.close()
 
 
-@app.route('/')
+@app.route('/home')
 def home():
-    return render_template('index.html')
-
+    return render_template('home.html')
 
 @app.route('/gallery')
 def gallery():
