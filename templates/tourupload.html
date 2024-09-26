@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+
+{% block title %}Tour Upload{% endblock %}
+
+{% block content %}
+<div class="tour-upload-form">
+    <h2>Upload a New Tour</h2>
+    <form method="POST" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+
+        <!-- Multiple Image Upload -->
+        <div class="form-group">
+            <label for="photos">Tour Images</label>
+            <input type="file" id="photos" name="photos" multiple required>
+            <small>Upload one or more images related to the tour.</small>
+        </div>
+
+        <!-- Tour Name -->
+        <div class="form-group">
+            <label for="tour_name">Tour Name</label>
+            <input type="text" id="tour_name" name="tour_name" required>
+        </div>
+
+        <!-- Combined Description and Explanation -->
+        <div class="form-group">
+            <label for="description">Tour Description and Explanation</label>
+            <textarea id="description" name="description" rows="5" required></textarea>
+        </div>
+
+        <!-- Location -->
+        <div class="form-group">
+            <label for="location">Location</label>
+            <input type="text" id="location" name="location" required>
+        </div>
+
+        <!-- Tags -->
+        <div class="form-group">
+            <label for="tags">Tags</label>
+            <input type="text" id="tags" name="tags" placeholder="e.g. adventure, beach, family">
+            <small>Add tags separated by commas.</small>
+        </div>
+
+        <!-- Tour Length -->
+        <div class="form-group">
+            <label for="tour_length">Tour Length (in days)</label>
+            <input type="number" id="tour_length" name="tour_length" min="1" required>
+        </div>
+
+        <!-- Hardship Level -->
+        <div class="form-group">
+            <label for="hardship_level">Hardship Level</label>
+            <select id="hardship_level" name="hardship_level" required>
+                <option value="1">1 - Very Easy</option>
+                <option value="2">2 - Easy</option>
+                <option value="3">3 - Moderate</option>
+                <option value="4">4 - Hard</option>
+                <option value="5">5 - Very Hard</option>
+            </select>
+        </div>
+
+        <!-- Possible Months -->
+        <div class="form-group">
+            <label for="possible_months">Possible Months</label>
+            <div class="months">
+                <input type="checkbox" id="january" name="possible_months" value="January">
+                <label for="january">January</label>
+
+                <input type="checkbox" id="february" name="possible_months" value="February">
+                <label for="february">February</label>
+
+                <input type="checkbox" id="march" name="possible_months" value="March">
+                <label for="march">March</label>
+
+                <input type="checkbox" id="april" name="possible_months" value="April">
+                <label for="april">April</label>
+
+                <input type="checkbox" id="may" name="possible_months" value="May">
+                <label for="may">May</label>
+
+                <input type="checkbox" id="june" name="possible_months" value="June">
+                <label for="june">June</label>
+
+                <input type="checkbox" id="july" name="possible_months" value="July">
+                <label for="july">July</label>
+
+                <input type="checkbox" id="august" name="possible_months" value="August">
+                <label for="august">August</label>
+
+                <input type="checkbox" id="september" name="possible_months" value="September">
+                <label for="september">September</label>
+
+                <input type="checkbox" id="october" name="possible_months" value="October">
+                <label for="october">October</label>
+
+                <input type="checkbox" id="november" name="possible_months" value="November">
+                <label for="november">November</label>
+
+                <input type="checkbox" id="december" name="possible_months" value="December">
+                <label for="december">December</label>
+            </div>
+            <small>Select at least one month, max 12.</small>
+        </div>
+
+        <!-- Price -->
+        <div class="form-group">
+            <label for="price">Price (in USD)</label>
+            <input type="number" id="price" name="price" min="0" required>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Submit Tour</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+<style>
+.tour-upload-form {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+.months {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.months input {
+    margin-right: 5px;
+}
+
+.btn {
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+</style>

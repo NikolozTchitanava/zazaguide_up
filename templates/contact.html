@@ -1,10 +1,177 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
-{% block title %}
-    Contact Us
-{% endblock %}
+{% block title %}Contact Admin{% endblock %}
 
 {% block content %}
-    <h1>Contact Us</h1>
-    <p>Feel free to reach out to us!</p>
+<div class="chat-container">
+    <div class="chat-header">
+        <h2>Conversation with Admin</h2>
+    </div>
+    <div class="chat-body" id="chatBody">
+        {% for message in messages %}
+            {% if message.startswith('user:') %}
+            <div class="message user-message">
+                <p>{{ message[6:] }}</p>
+            </div>
+            {% else %}
+            <div class="message admin-message">
+                <p>{{ message[6:] }}</p>
+            </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+    <div class="chat-footer">
+        <form id="messageForm">
+            <input type="text" name="message" placeholder="Type your message..." autocomplete="off" required>
+            <button type="submit">Send</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block css %}
+<style>
+    .chat-container {
+        display: flex;
+        flex-direction: column;
+        height: 500px;
+        border: 1px solid #ff2020;
+        border-radius: 8px;
+        background-color: white;
+        overflow: hidden;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .chat-header {
+        background-color: #ff2020;
+        color: white;
+        padding: 15px;
+        text-align: center;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .chat-body {
+        flex-grow: 1;
+        padding: 15px;
+        overflow-y: auto;
+        background-color: #f4f4f4;
+    }
+
+    .message {
+        max-width: 70%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 10px;
+        font-size: 14px;
+        line-height: 1.6;
+        word-wrap: break-word;
+    }
+
+    .user-message {
+        background-color: #ff2020;
+        color: white;
+        align-self: flex-end;
+    }
+
+    .admin-message {
+        background-color: #e0e0e0;
+        color: #333;
+        align-self: flex-start;
+    }
+
+    .chat-footer {
+        padding: 10px;
+        border-top: 1px solid #ddd;
+        background-color: white;
+        display: flex;
+    }
+
+    .chat-footer input {
+        flex-grow: 1;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 14px;
+    }
+
+    .chat-footer button {
+        background-color: #ff2020;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        margin-left: 10px;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+
+    .chat-footer button:hover {
+        background-color: #e60000;
+    }
+</style>
+{% endblock %}
+
+{% block script %}
+<script>
+    let displayedMessages = new Set();
+
+    function fetchNewMessages() {
+        fetch('/get_new_messages')
+            .then(response => response.json())
+            .then(data => {
+                const chatBody = document.getElementById('chatBody');
+                let shouldScroll = chatBody.scrollTop + chatBody.clientHeight === chatBody.scrollHeight;
+
+                data.messages.forEach(messageObj => {
+                    if (!displayedMessages.has(messageObj.id)) {
+                        let messageDiv = document.createElement('div');
+                        messageDiv.classList.add('message');
+                        if (messageObj.sender === 'user') {
+                            messageDiv.classList.add('user-message');
+                            messageDiv.innerHTML = `<p>${messageObj.message}</p>`;
+                        } else if (messageObj.sender === 'admin') {
+                            messageDiv.classList.add('admin-message');
+                            messageDiv.innerHTML = `<p>${messageObj.message}</p>`;
+                        }
+                        chatBody.appendChild(messageDiv);
+                        displayedMessages.add(messageObj.id);
+                    }
+                });
+
+                if (shouldScroll) {
+                    chatBody.scrollTop = chatBody.scrollHeight;
+                }
+            })
+            .catch(error => console.error('Error fetching new messages:', error));
+    }
+
+    setInterval(fetchNewMessages, 1000);
+
+    document.getElementById('messageForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const messageInput = this.querySelector('input[name="message"]');
+        fetch('/contact', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams(new FormData(this))
+        })
+        .then(response => {
+            if (response.ok) {
+                messageInput.value = '';
+                fetchNewMessages();
+            } else {
+                console.error('Failed to send message');
+            }
+        })
+        .catch(error => console.error('Error sending message:', error));
+    });
+
+    window.onload = function() {
+        const chatBody = document.getElementById('chatBody');
+        chatBody.scrollTop = chatBody.scrollHeight;
+    };
+</script>
 {% endblock %}

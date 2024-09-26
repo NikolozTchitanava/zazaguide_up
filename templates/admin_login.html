@@ -5,21 +5,68 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Admin Login</h1>
-    <form method="post">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-        <button type="submit">Login</button>
-    </form>
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    <div class="error-messages">
-        {% for message in messages %}
-        <p>{{ message }}</p>
-        {% endfor %}
-    </div>
-    {% endif %}
-    {% endwith %}
+<h1>Admin Login</h1>
+<form method="post">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" required>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required>
+    <button type="submit">Login</button>
+</form>
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<div class="error-messages">
+    {% for message in messages %}
+    <p>{{ message }}</p>
+    {% endfor %}
+</div>
+{% endif %}
+{% endwith %}
 {% endblock %}
+
+<style>
+body {
+    background-color: #f4f4f4;
+}
+
+form {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #ff2020;
+    max-width: 400px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-bottom: 5px;
+    color: #ff2020;
+}
+
+input {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+button {
+    background-color: #ff2020;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+button:hover {
+    background-color: #e60000;
+}
+
+.error-messages {
+    margin-top: 10px;
+    color: red;
+}
+</style>
