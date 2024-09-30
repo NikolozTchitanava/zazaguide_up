@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Book This Tour{% endblock %}
+
+{% block content %}
+    <h2>Book Tour: {{ tour[0] }}</h2>
+
+    <form method="POST">
+        <label for="selected_date">Choose a date:</label>
+        <input type="date" id="selected_date" name="selected_date" required>
+        <button type="submit">Submit Booking Request</button>
+    </form>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+{% endblock %}
+
+<style>
+    form {
+        margin-top: 20px;
+        font-size: 18px;
+    }
+
+    ul {
+        color: red;
+        list-style-type: none;
+        padding: 0;
+        margin-top: 10px;
+    }
+
+    li {
+        font-size: 16px;
+    }
+</style>

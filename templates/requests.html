@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}Booking Requests{% endblock %}
+
+{% block content %}
+<h2>Booking Requests</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Tour</th>
+            <th>Date</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for request in requests %}
+        <tr>
+            <td>{{ request[1] }}</td>
+            <td>{{ request[2] }}</td>
+            <td>{{ request[3] }}</td>
+            <td>
+                <form method="POST" action="{{ url_for('confirm_request', request_id=request[0]) }}">
+                    <button type="submit" class="btn-confirm">Confirm</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    th, td {
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+    .btn-confirm {
+        background-color: #28a745;
+        color: white;
+        padding: 5px 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .btn-confirm:hover {
+        background-color: #218838;
+    }
+</style>

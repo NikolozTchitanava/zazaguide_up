@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block title %}Tour Info{% endblock %}
+
+{% block content %}
+<div class="tour-info">
+    <h2>{{ tour[1] }}</h2>
+    <p><strong>Description:</strong> {{ tour[2] }}</p>
+    <p><strong>Location:</strong> {{ tour[3] }}</p>
+    <p><strong>Tags:</strong> {{ tour[4] }}</p>
+    <p><strong>Tour Length:</strong> {{ tour[5] }} days</p>
+    <p><strong>Hardship Level:</strong> {{ tour[6] }}</p>
+    <p><strong>Possible Months:</strong> {{ tour[7] }}</p>
+    <p><strong>Price:</strong> ${{ tour[8] }}</p>
+
+    <!-- Booking Button -->
+    <form method="GET" action="{{ url_for('booking', tour_id=tour[0]) }}">
+        <button type="submit" class="btn btn-booking">Book This Tour</button>
+    </form>
+
+    <!-- If images are stored, show them -->
+    {% if tour[9] %}
+    <div class="tour-images">
+        <h3>Images:</h3>
+        <ul>
+            {% for image in tour[9].split(',') %}
+            <li><img src="{{ url_for('uploaded_file', filename=image) }}" alt="Tour Image" class="tour-image"></li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+<style>
+.tour-info {
+    padding: 20px;
+}
+
+.tour-info h2 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.tour-info p {
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 10px;
+}
+
+.tour-images ul {
+    list-style: none;
+    padding: 0;
+}
+
+.tour-images li {
+    margin-bottom: 10px;
+}
+
+.tour-images img {
+    max-width: 300px;
+    border-radius: 8px;
+}
+
+.btn-booking {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    font-size: 16px;
+}
+
+.btn-booking:hover {
+    background-color: #0056b3;
+}
+</style>

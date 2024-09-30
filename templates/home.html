@@ -6,6 +6,19 @@
 <div class="home-container">
     {% if session['user_logged_in'] %}
         <h1>Welcome to ZazaGuide, {{ session['username'] }}!</h1>
+
+        <h3>Your Confirmed Bookings:</h3>
+        {% if confirmed_bookings %}
+            <ul>
+                {% for booking in confirmed_bookings %}
+                    <li>
+                        Tour: {{ booking[1] }} on {{ booking[2] }}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>You have no confirmed bookings yet.</p>
+        {% endif %}
     {% else %}
         <h1>Welcome to ZazaGuide!</h1>
     {% endif %}
@@ -23,6 +36,11 @@
     h1 {
         color: #ff2020;
         font-size: 32px;
+    }
+
+    h3 {
+        color: #333;
+        font-size: 24px;
     }
 
     p {

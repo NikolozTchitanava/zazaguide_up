@@ -8,45 +8,36 @@
     <form method="POST" enctype="multipart/form-data">
         {{ form.hidden_tag() }}
 
-        <!-- Multiple Image Upload -->
         <div class="form-group">
             <label for="photos">Tour Images</label>
             <input type="file" id="photos" name="photos" multiple required>
-            <small>Upload one or more images related to the tour.</small>
         </div>
 
-        <!-- Tour Name -->
         <div class="form-group">
             <label for="tour_name">Tour Name</label>
             <input type="text" id="tour_name" name="tour_name" required>
         </div>
 
-        <!-- Combined Description and Explanation -->
         <div class="form-group">
             <label for="description">Tour Description and Explanation</label>
             <textarea id="description" name="description" rows="5" required></textarea>
         </div>
 
-        <!-- Location -->
         <div class="form-group">
             <label for="location">Location</label>
             <input type="text" id="location" name="location" required>
         </div>
 
-        <!-- Tags -->
         <div class="form-group">
             <label for="tags">Tags</label>
             <input type="text" id="tags" name="tags" placeholder="e.g. adventure, beach, family">
-            <small>Add tags separated by commas.</small>
         </div>
 
-        <!-- Tour Length -->
         <div class="form-group">
             <label for="tour_length">Tour Length (in days)</label>
             <input type="number" id="tour_length" name="tour_length" min="1" required>
         </div>
 
-        <!-- Hardship Level -->
         <div class="form-group">
             <label for="hardship_level">Hardship Level</label>
             <select id="hardship_level" name="hardship_level" required>
@@ -58,7 +49,6 @@
             </select>
         </div>
 
-        <!-- Possible Months -->
         <div class="form-group">
             <label for="possible_months">Possible Months</label>
             <div class="months">
@@ -98,16 +88,13 @@
                 <input type="checkbox" id="december" name="possible_months" value="December">
                 <label for="december">December</label>
             </div>
-            <small>Select at least one month, max 12.</small>
         </div>
 
-        <!-- Price -->
         <div class="form-group">
             <label for="price">Price (in USD)</label>
             <input type="number" id="price" name="price" min="0" required>
         </div>
 
-        <!-- Submit Button -->
         <div class="form-group">
             <button type="submit" class="btn btn-primary">Submit Tour</button>
         </div>

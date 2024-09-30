@@ -11,7 +11,7 @@
         {% for message in messages %}
             {% if message.startswith('user:') %}
             <div class="message user-message">
-                <p>{{ message[6:] }}</p>
+                <p>{{ message[5:] }}</p>
             </div>
             {% else %}
             <div class="message admin-message">
@@ -111,46 +111,34 @@
 {% endblock %}
 
 <script>
-   let displayedMessages = new Set(); // Track displayed messages to prevent duplication
-
-function fetchNewMessages() {
-    fetch('/get_new_messages')
-        .then(response => response.json())
-        .then(data => {
-            const chatBody = document.getElementById('chatBody');
-            
-            data.messages.forEach(messageObj => {
-                if (!displayedMessages.has(messageObj.id)) {  // Ensure no repeated messages
+    function fetchNewMessages() {
+        fetch('/get_new_messages')
+            .then(response => response.json())
+            .then(data => {
+                const chatBody = document.getElementById('chatBody');
+                chatBody.innerHTML = '';
+                data.messages.forEach(message => {
                     let messageDiv = document.createElement('div');
                     messageDiv.classList.add('message');
-                    
-                    // Check the sender and apply the appropriate class
-                    if (messageObj.sender === 'user') {
+                    if (message.startsWith('user:')) {
                         messageDiv.classList.add('user-message');
-                        messageDiv.innerHTML = `<p>${messageObj.message}</p>`;
-                    } else if (messageObj.sender === 'admin') {
+                        messageDiv.innerHTML = `<p>${message.slice(5)}</p>`;
+                    } else {
                         messageDiv.classList.add('admin-message');
-                        messageDiv.innerHTML = `<p>${messageObj.message}</p>`;
+                        messageDiv.innerHTML = `<p>${message.slice(5)}</p>`;
                     }
-
-                    // Append the message to the chat
                     chatBody.appendChild(messageDiv);
-                    displayedMessages.add(messageObj.id); // Mark message as displayed
-                }
-            });
-            
-            // Auto-scroll to the latest message
-            chatBody.scrollTop = chatBody.scrollHeight;
-        })
-        .catch(error => console.error('Error fetching new messages:', error));
-}
+                });
+                chatBody.scrollTop = chatBody.scrollHeight;
+            })
+            .catch(error => console.error('Error fetching new messages:', error));
+    }
 
-setInterval(fetchNewMessages, 5000);
+    setInterval(fetchNewMessages, 5000);
 
-window.onload = function() {
-    const chatBody = document.getElementById('chatBody');
-    chatBody.scrollTop = chatBody.scrollHeight;
-};
-
+    window.onload = function() {
+        const chatBody = document.getElementById('chatBody');
+        chatBody.scrollTop = chatBody.scrollHeight;
+    };
 </script>
 

@@ -5,5 +5,112 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Welcome to Tours</h1>
+    <h1>Available Tours</h1>
+
+    <div class="tour-list">
+        {% for tour in tours %}
+            <div class="tour-item" id="tour-{{ loop.index }}" data-images="{{ tour[3].split(',')|join(' ') }}">
+                <div class="image-container">
+                    <img src="{{ url_for('uploaded_file', filename=tour[3].split(',')[0]) }}" alt="{{ tour[1] }} image" class="tour-image">
+                </div>
+                <div class="tour-info">
+                    <h2>
+                        <a href="{{ url_for('tour_info', tour_id=tour[0]) }}">{{ tour[1] }}</a>
+                    </h2>
+                    <p><strong>Location:</strong> {{ tour[2] }}</p>
+                </div>
+            </div>
+        {% else %}
+            <p>No tours available at the moment.</p>
+        {% endfor %}
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tourItems = document.querySelectorAll('.tour-item');
+            
+            tourItems.forEach(function(item) {
+                const images = item.dataset.images.split(' ');
+                let currentImageIndex = 0;
+                const imageElement = item.querySelector('.tour-image');
+
+                setInterval(function() {
+                    currentImageIndex = (currentImageIndex + 1) % images.length;
+                    imageElement.src = "{{ url_for('uploaded_file', filename='') }}" + images[currentImageIndex];
+                }, 5000);
+            });
+        });
+    </script>
 {% endblock %}
+
+<style>
+    .tour-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: space-between;
+    }
+
+    .tour-item {
+        flex: 0 1 30%;
+        max-width: 30%;
+        border: 1px solid #ddd;
+        border-radius: 15px;
+        overflow: hidden;
+        background-color: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        position: relative;
+        cursor: pointer;
+    }
+
+    .image-container {
+        height: 200px;
+        overflow: hidden;
+    }
+
+    .tour-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .tour-info {
+        padding: 10px;
+    }
+
+    .tour-info h2 {
+        font-size: 1.2rem;
+        margin: 0 0 5px;
+    }
+
+    .tour-info h2 a {
+        text-decoration: none;
+        color: #d00a32;
+    }
+
+    .tour-info h2 a:hover {
+        color: #d82c2c;
+    }
+
+    .tour-info p {
+        font-size: 1rem;
+        color: #555;
+    }
+
+    @media (max-width: 768px) {
+        .tour-item {
+            flex: 0 1 45%;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .tour-item {
+            flex: 0 1 100%;
+        }
+    }
+</style>
+

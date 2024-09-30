@@ -37,6 +37,21 @@
         <a href="{{ url_for('admin_tours') }}">Go to Tour Upload</a>
     </div>
 
+    <div class="booking-requests">
+        <h3>Manage Booking Requests</h3>
+        <a href="{{ url_for('admin_requests') }}">Go to Booking Requests</a>
+    </div>
+
+    <div class="confirmed-bookings">
+        <h3>Confirmed Bookings</h3>
+        <ul>
+            {% for booking in confirmed_bookings %}
+            <li>{{ booking[0] }} booked {{ booking[1] }} on {{ booking[2] }}</li>
+            {% else %}
+            <p>No confirmed bookings yet.</p>
+            {% endfor %}
+        </ul>
+    </div>
 </div>
 {% endblock %}
 
@@ -53,16 +68,16 @@
     font-weight: bold;
 }
 
-.conversation-list h3 {
+.conversation-list h3, .confirmed-bookings h3, .booking-requests h3 {
     color: #ff2020;
 }
 
-.conversation-list ul {
+.conversation-list ul, .confirmed-bookings ul {
     list-style: none;
     padding: 0;
 }
 
-.conversation-list li {
+.conversation-list li, .confirmed-bookings li {
     margin-bottom: 10px;
 }
 
@@ -90,11 +105,11 @@
     font-weight: bold;
 }
 
-.tour-upload {
+.tour-upload, .booking-requests {
     margin-top: 20px;
 }
 
-.tour-upload a {
+.tour-upload a, .booking-requests a {
     display: inline-block;
     padding: 10px 15px;
     background-color: #007bff;
@@ -104,7 +119,7 @@
     font-weight: bold;
 }
 
-.tour-upload a:hover {
+.tour-upload a:hover, .booking-requests a:hover {
     background-color: #0056b3;
 }
 </style>

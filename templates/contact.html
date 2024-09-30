@@ -116,62 +116,86 @@
 <script>
     let displayedMessages = new Set();
 
-    function fetchNewMessages() {
-        fetch('/get_new_messages')
-            .then(response => response.json())
-            .then(data => {
-                const chatBody = document.getElementById('chatBody');
-                let shouldScroll = chatBody.scrollTop + chatBody.clientHeight === chatBody.scrollHeight;
+function fetchNewMessages() {
+    fetch('/get_new_messages')
+        .then(response => response.json())
+        .then(data => {
+            const chatBody = document.getElementById('chatBody');
+            let shouldScroll = chatBody.scrollTop + chatBody.clientHeight === chatBody.scrollHeight;
 
-                data.messages.forEach(messageObj => {
-                    if (!displayedMessages.has(messageObj.id)) {
-                        let messageDiv = document.createElement('div');
-                        messageDiv.classList.add('message');
-                        if (messageObj.sender === 'user') {
-                            messageDiv.classList.add('user-message');
-                            messageDiv.innerHTML = `<p>${messageObj.message}</p>`;
-                        } else if (messageObj.sender === 'admin') {
-                            messageDiv.classList.add('admin-message');
-                            messageDiv.innerHTML = `<p>${messageObj.message}</p>`;
-                        }
-                        chatBody.appendChild(messageDiv);
-                        displayedMessages.add(messageObj.id);
+            data.messages.forEach(messageObj => {
+                if (!displayedMessages.has(messageObj.id)) {
+                    let messageDiv = document.createElement('div');
+                    messageDiv.classList.add('message');
+                    if (messageObj.sender === 'user') {
+                        messageDiv.classList.add('user-message');
+                        messageDiv.innerHTML = `<p>${messageObj.message}</p>`;
+                    } else if (messageObj.sender === 'admin') {
+                        messageDiv.classList.add('admin-message');
+                        messageDiv.innerHTML = `<p>${messageObj.message}</p>`;
                     }
-                });
-
-                if (shouldScroll) {
-                    chatBody.scrollTop = chatBody.scrollHeight;
+                    chatBody.appendChild(messageDiv);
+                    displayedMessages.add(messageObj.id);
                 }
-            })
-            .catch(error => console.error('Error fetching new messages:', error));
+            });
+
+            if (shouldScroll) {
+                chatBody.scrollTop = chatBody.scrollHeight;
+            }
+
+            // Poll again after a short delay to simulate long polling
+            setTimeout(fetchNewMessages, 1000); // Check every second
+        })
+        .catch(error => {
+            console.error('Error fetching new messages:', error);
+            // Retry after a short delay in case of an error
+            setTimeout(fetchNewMessages, 1000);
+        });
+}
+
+document.getElementById('messageForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const messageInput = this.querySelector('input[name="message"]');
+    const message = messageInput.value.trim();
+
+    if (!message) {
+        return; // Prevent sending empty messages
     }
 
-    setInterval(fetchNewMessages, 1000);
+    fetch('/contact', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: new URLSearchParams(new FormData(this))
+    })
+    .then(response => {
+        if (response.ok) {
+            messageInput.value = ''; // Clear input after successful submission
 
-    document.getElementById('messageForm').addEventListener('submit', function(event) {
-        event.preventDefault();
-        const messageInput = this.querySelector('input[name="message"]');
-        fetch('/contact', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: new URLSearchParams(new FormData(this))
-        })
-        .then(response => {
-            if (response.ok) {
-                messageInput.value = '';
-                fetchNewMessages();
-            } else {
-                console.error('Failed to send message');
-            }
-        })
-        .catch(error => console.error('Error sending message:', error));
-    });
+            // Immediately append the user's message to the chatBody
+            const chatBody = document.getElementById('chatBody');
+            let messageDiv = document.createElement('div');
+            messageDiv.classList.add('message', 'user-message');
+            messageDiv.innerHTML = `<p>${message}</p>`;
+            chatBody.appendChild(messageDiv);
+            
+            chatBody.scrollTop = chatBody.scrollHeight; // Auto-scroll
+        } else {
+            console.error('Failed to send message');
+        }
+    })
+    .catch(error => console.error('Error sending message:', error));
+});
 
-    window.onload = function() {
-        const chatBody = document.getElementById('chatBody');
-        chatBody.scrollTop = chatBody.scrollHeight;
-    };
+window.onload = function() {
+    const chatBody = document.getElementById('chatBody');
+    chatBody.scrollTop = chatBody.scrollHeight;
+
+    // Start fetching new messages when the page is loaded
+    fetchNewMessages();
+};
+
+
 </script>
 {% endblock %}
